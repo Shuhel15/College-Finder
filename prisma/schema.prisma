@@ -5,3 +5,84 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  password      String
+  emailVerified DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  reviews       Review[]
+  savedColleges SavedCollege[]
+
+  @@index([email])
+}
+
+model College {
+  id               String         @id @default(cuid())
+  name             String
+  slug             String         @unique
+  location         String
+  fees             Int
+  rating           Float
+  averagePlacement Int
+  highestPlacement Int
+  overview         String
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  courses          Course[]
+  reviews          Review[]
+  savedColleges    SavedCollege[]
+
+  @@index([location])
+  @@index([rating])
+  @@index([fees])
+  @@index([averagePlacement])
+  @@index([name])
+}
+
+model Course {
+  id        String   @id @default(cuid())
+  name      String
+  collegeId String
+  createdAt DateTime @default(now())
+
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([collegeId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  content   String
+  userId    String
+  collegeId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([collegeId])
+  @@index([rating])
+}
+
+model SavedCollege {
+  id        String   @id @default(cuid())
+  userId    String
+  collegeId String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collegeId])
+  @@index([userId])
+  @@index([collegeId])
+}
