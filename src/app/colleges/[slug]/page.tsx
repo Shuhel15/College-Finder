@@ -12,6 +12,11 @@ import {
 } from "lucide-react";
 
 import CourseList from "@/components/CourseList";
+import SaveButton from "@/components/SaveButton";
+import { getServerSession } from "next-auth";
+
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 type Course = {
   id: string;
@@ -141,9 +146,9 @@ export default async function CollegeDetailPage({
 
           <Link
             href="/"
-            className="mt-7 inline-flex items-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-500"
+            className="group mt-7 inline-flex items-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-500 active:scale-95"
           >
-            <ArrowLeft size={17} />
+            <ArrowLeft size={17} className="transition-transform duration-200 group-hover:-translate-x-1" />
             Back to colleges
           </Link>
         </div>
@@ -151,22 +156,35 @@ export default async function CollegeDetailPage({
     );
   }
 
+  const session = await getServerSession(authOptions);
+  const savedCollege = session?.user?.id
+    ? await prisma.savedCollege.findUnique({
+        where: {
+          userId_collegeId: {
+            userId: session.user.id,
+            collegeId: college.id,
+          },
+        },
+        select: {
+          id: true,
+        },
+      })
+    : null;
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
-      {/* Top navigation */}
       <div className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-4 lg:px-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-cyan-600"
+            className="group inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-slate-500 transition hover:bg-cyan-50 hover:text-cyan-600 active:scale-95"
           >
-            <ArrowLeft size={17} />
+            <ArrowLeft size={17} className="transition-transform duration-200 group-hover:-translate-x-1" />
             Back to colleges
           </Link>
         </div>
       </div>
 
-      {/* Hero */}
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
           <div className="grid gap-10 lg:grid-cols-[1fr_300px]">
@@ -199,7 +217,6 @@ export default async function CollegeDetailPage({
               </p>
             </div>
 
-            {/* Rating */}
             <div className="self-end lg:border-l lg:border-slate-200 lg:pl-8">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
                 Overall rating
@@ -225,7 +242,6 @@ export default async function CollegeDetailPage({
         </div>
       </section>
 
-      {/* Key information */}
       <section className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-slate-200 bg-white p-5">
@@ -286,12 +302,10 @@ export default async function CollegeDetailPage({
         </div>
       </section>
 
-      {/* Content */}
       <section className="mx-auto max-w-7xl px-6 pb-20 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1fr_350px]">
-          {/* Main */}
           <div>
-            {/* Overview */}
+
             <section className="rounded-xl border border-slate-200 bg-white p-6 sm:p-8">
               <div className="mb-6">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-600">
@@ -308,7 +322,6 @@ export default async function CollegeDetailPage({
               </p>
             </section>
 
-            {/* Courses */}
             <section className="mt-8">
               <div className="mb-5">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-600">
@@ -323,7 +336,6 @@ export default async function CollegeDetailPage({
               <CourseList courses={college.courses} />
             </section>
 
-            {/* Reviews */}
             <section className="mt-10">
               <div className="mb-5 flex items-end justify-between gap-4">
                 <div>
@@ -392,7 +404,6 @@ export default async function CollegeDetailPage({
             </section>
           </div>
 
-          {/* Sidebar */}
           <aside>
             <div className="sticky top-6 rounded-xl border border-slate-200 bg-slate-950 p-6 text-white">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
@@ -451,13 +462,18 @@ export default async function CollegeDetailPage({
               </div>
 
               <div className="mt-7 border-t border-white/10 pt-6">
+                <SaveButton
+                  collegeId={college.id}
+                  initialSaved={Boolean(savedCollege)}
+                />
+
                 <Link
                   href="/"
-                  className="flex items-center justify-between rounded-lg bg-cyan-500 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-cyan-400"
+                  className="group mt-3 flex items-center justify-between rounded-lg bg-cyan-500 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-cyan-400 active:scale-95"
                 >
                   Explore more colleges
 
-                  <ArrowUpRight size={18} />
+                  <ArrowUpRight size={18} className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </Link>
               </div>
             </div>

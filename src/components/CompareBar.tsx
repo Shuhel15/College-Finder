@@ -208,9 +208,9 @@ useEffect(() => {
                       removeCollege(college.id)
                     }
                     aria-label={`Remove ${college.name}`}
-                    className="shrink-0 text-slate-400 transition hover:text-red-500"
+                    className="group shrink-0 rounded-md p-1 text-slate-400 transition hover:bg-red-50 hover:text-red-500 active:scale-95"
                   >
-                    <X size={14} />
+                    <X size={14} className="transition-transform duration-200 group-hover:rotate-90" />
                   </button>
                 </div>
               ))}
@@ -221,7 +221,7 @@ useEffect(() => {
             <button
               type="button"
               onClick={clearAll}
-              className="text-xs font-semibold text-slate-500 transition hover:text-red-500"
+              className="rounded-lg px-2 py-2 text-xs font-semibold text-slate-500 transition hover:bg-red-50 hover:text-red-500 active:scale-95"
             >
               Clear all
             </button>
@@ -235,7 +235,7 @@ useEffect(() => {
                   : "#"
               }
               aria-disabled={colleges.length < 2}
-              className={`inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold transition ${
+              className={`group inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold transition active:scale-95 ${
                 colleges.length >= 2
                   ? "bg-cyan-500 text-white hover:bg-cyan-600"
                   : "cursor-not-allowed bg-slate-100 text-slate-400"
@@ -247,7 +247,7 @@ useEffect(() => {
               }}
             >
               Compare
-              <ArrowRight size={17} />
+              <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
         </div>

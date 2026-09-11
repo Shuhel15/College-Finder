@@ -81,9 +81,9 @@ export default async function ComparePage({
         <div className="mx-auto max-w-4xl px-6 py-20 lg:px-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-cyan-600"
+            className="group inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-slate-500 transition hover:bg-cyan-50 hover:text-cyan-600 active:scale-95"
           >
-            <ArrowLeft size={17} />
+            <ArrowLeft size={17} className="transition-transform duration-200 group-hover:-translate-x-1" />
             Back to colleges
           </Link>
 
@@ -103,13 +103,10 @@ export default async function ComparePage({
 
             <Link
               href="/"
-              className="mt-7 inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-5 py-3 text-sm font-bold text-white transition hover:bg-cyan-600"
+              className="group mt-7 inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-5 py-3 text-sm font-bold text-white transition hover:bg-cyan-600 active:scale-95"
             >
               Explore colleges
-              <ArrowLeft
-                size={16}
-                className="rotate-180"
-              />
+              <ArrowLeft size={16} className="rotate-180 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
@@ -129,9 +126,9 @@ export default async function ComparePage({
         <div className="mx-auto max-w-4xl px-6 py-20 lg:px-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-cyan-600"
+            className="group inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-slate-500 transition hover:bg-cyan-50 hover:text-cyan-600 active:scale-95"
           >
-            <ArrowLeft size={17} />
+            <ArrowLeft size={17} className="transition-transform duration-200 group-hover:-translate-x-1" />
             Back to colleges
           </Link>
 
@@ -151,7 +148,7 @@ export default async function ComparePage({
 
             <Link
               href="/"
-              className="mt-7 inline-flex items-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-cyan-500"
+              className="mt-7 inline-flex items-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-cyan-500 active:scale-95"
             >
               Choose colleges
             </Link>
@@ -163,14 +160,13 @@ export default async function ComparePage({
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
-      {/* Header */}
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-cyan-600"
+            className="group inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-slate-500 transition hover:bg-cyan-50 hover:text-cyan-600 active:scale-95"
           >
-            <ArrowLeft size={17} />
+            <ArrowLeft size={17} className="transition-transform duration-200 group-hover:-translate-x-1" />
             Back to colleges
           </Link>
 
@@ -198,7 +194,6 @@ export default async function ComparePage({
         </div>
       </section>
 
-      {/* Comparison */}
       <section className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
         <CollegeComparisonTable colleges={colleges} />
       </section>

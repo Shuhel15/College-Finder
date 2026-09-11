@@ -11,6 +11,10 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import SortDropdown from "@/components/SortDropdown";
 import CompareBar from "@/components/CompareBar";
+import { getServerSession } from "next-auth";
+
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 type SearchParams = {
   search?: string;
@@ -126,6 +130,25 @@ export default async function HomePage({
 
   const result = await getColleges(params);
 
+  const session = await getServerSession(authOptions);
+  const savedColleges = session?.user?.id
+    ? await prisma.savedCollege.findMany({
+        where: {
+          userId: session.user.id,
+          collegeId: {
+            in: result.data.map((college) => college.id),
+          },
+        },
+        select: {
+          collegeId: true,
+        },
+      })
+    : [];
+
+  const savedCollegeIds = new Set(
+    savedColleges.map((savedCollege) => savedCollege.collegeId),
+  );
+
   const hasFilters =
     Boolean(params.search) ||
     Boolean(params.location) ||
@@ -135,7 +158,6 @@ export default async function HomePage({
 
   return (
     <main className="min-h-screen bg-white text-slate-950">
-      {/* Hero */}
       <section className="border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-6 pb-14 pt-16 lg:px-8 lg:pb-16 lg:pt-20">
           <div className="max-w-4xl">
@@ -158,14 +180,12 @@ export default async function HomePage({
             </p>
           </div>
 
-          {/* Search */}
           <div className="mt-10 max-w-3xl">
             <SearchBar initialValue={params.search} />
           </div>
         </div>
       </section>
 
-      {/* Main */}
       <section className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
         <FilterPanel
           initialLocation={params.location}
@@ -174,7 +194,6 @@ export default async function HomePage({
           initialMinRating={params.minRating}
         />
 
-        {/* Results header */}
         <div className="mt-10 flex flex-col justify-between gap-5 border-b border-slate-200 pb-5 sm:flex-row sm:items-end">
           <div>
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-cyan-600">
@@ -203,7 +222,6 @@ export default async function HomePage({
           />
         </div>
 
-        {/* Results */}
         <div className="mt-2">
           {!result.success ? (
             <div className="border-t border-slate-200 py-20 text-center">
@@ -229,6 +247,7 @@ export default async function HomePage({
                   <CollegeCard
                     key={college.id}
                     college={college}
+                    initialSaved={savedCollegeIds.has(college.id)}
                   />
                 ))}
               </div>

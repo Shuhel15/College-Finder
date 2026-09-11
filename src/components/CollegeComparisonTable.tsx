@@ -45,7 +45,7 @@ export default function CollegeComparisonTable({
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="overflow-x-auto">
-        <table className="min-w-[760px] w-full border-collapse">
+        <table className="min-w-190 w-full border-collapse">
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50">
               <th className="w-48 px-6 py-6 text-left text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -55,7 +55,7 @@ export default function CollegeComparisonTable({
               {colleges.map((college) => (
                 <th
                   key={college.id}
-                  className="min-w-[240px] border-l border-slate-200 px-6 py-6 text-left align-top"
+                  className="min-w-60 border-l border-slate-200 px-6 py-6 text-left align-top"
                 >
                   <h2 className="text-lg font-bold leading-6 text-slate-950">
                     {college.name}
@@ -63,10 +63,10 @@ export default function CollegeComparisonTable({
 
                   <Link
                     href={`/colleges/${college.slug}`}
-                    className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-600 transition hover:text-cyan-700"
+                    className="group mt-3 inline-flex items-center gap-1.5 rounded-md px-1 py-1 text-xs font-semibold text-cyan-600 transition hover:bg-cyan-50 hover:text-cyan-700 active:scale-95"
                   >
                     View details
-                    <ArrowUpRight size={13} />
+                    <ArrowUpRight size={13} className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </Link>
                 </th>
               ))}
@@ -74,7 +74,6 @@ export default function CollegeComparisonTable({
           </thead>
 
           <tbody>
-            {/* Location */}
             <tr className="border-b border-slate-200">
               <td className="px-6 py-6">
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
@@ -96,7 +95,6 @@ export default function CollegeComparisonTable({
               ))}
             </tr>
 
-            {/* Fees */}
             <tr className="border-b border-slate-200">
               <td className="px-6 py-6">
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
@@ -118,7 +116,6 @@ export default function CollegeComparisonTable({
               ))}
             </tr>
 
-            {/* Rating */}
             <tr className="border-b border-slate-200">
               <td className="px-6 py-6">
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
@@ -140,7 +137,6 @@ export default function CollegeComparisonTable({
               ))}
             </tr>
 
-            {/* Average placement */}
             <tr className="border-b border-slate-200">
               <td className="px-6 py-6">
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
@@ -164,7 +160,6 @@ export default function CollegeComparisonTable({
               ))}
             </tr>
 
-            {/* Highest placement */}
             <tr>
               <td className="px-6 py-6">
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">

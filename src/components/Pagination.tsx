@@ -34,9 +34,9 @@ export default function Pagination({
         type="button"
         disabled={page <= 1}
         onClick={() => goToPage(page - 1)}
-        className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-cyan-600 disabled:cursor-not-allowed disabled:text-slate-300"
+        className="group flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-slate-700 transition hover:bg-cyan-50 hover:text-cyan-600 active:scale-95 disabled:cursor-not-allowed disabled:text-slate-300 disabled:hover:bg-transparent"
       >
-        <ChevronLeft size={18} />
+        <ChevronLeft size={18} className="transition-transform duration-200 group-hover:-translate-x-1" />
         Previous
       </button>
 
@@ -55,10 +55,10 @@ export default function Pagination({
         type="button"
         disabled={page >= totalPages}
         onClick={() => goToPage(page + 1)}
-        className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-cyan-600 disabled:cursor-not-allowed disabled:text-slate-300"
+        className="group flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-slate-700 transition hover:bg-cyan-50 hover:text-cyan-600 active:scale-95 disabled:cursor-not-allowed disabled:text-slate-300 disabled:hover:bg-transparent"
       >
         Next
-        <ChevronRight size={18} />
+        <ChevronRight size={18} className="transition-transform duration-200 group-hover:translate-x-1" />
       </button>
     </div>
   );

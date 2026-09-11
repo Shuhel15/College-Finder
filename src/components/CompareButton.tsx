@@ -77,13 +77,23 @@ export default function CompareButton({ collegeId }: { collegeId: string }) {
       type="button"
       onClick={toggleCompare}
       aria-pressed={selected}
-      className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition ${
+      className={`group inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition active:scale-95 ${
         selected
           ? "border-cyan-500 bg-cyan-50 text-cyan-700"
           : "border-slate-200 bg-white text-slate-700 hover:border-cyan-300 hover:text-cyan-600"
       }`}
     >
-      {selected ? <Check size={16} /> : <GitCompareArrows size={16} />}
+      {selected ? (
+        <Check
+          size={16}
+          className="transition-transform duration-200 group-hover:translate-x-0.5"
+        />
+      ) : (
+        <GitCompareArrows
+          size={16}
+          className="transition-transform duration-200 group-hover:rotate-90"
+        />
+      )}
 
       {selected ? "Compared" : "Compare"}
     </button>

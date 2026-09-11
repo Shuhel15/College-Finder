@@ -53,7 +53,7 @@ export default function SearchBar({
 
       <button
         type="submit"
-        className="rounded-xl bg-cyan-500 px-7 py-3.5 text-sm font-bold text-white shadow-md shadow-cyan-200 transition-all hover:-translate-y-0.5 hover:bg-cyan-600 hover:shadow-lg hover:shadow-cyan-200/70 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 active:translate-y-0 sm:ml-2"
+        className="rounded-xl bg-cyan-500 px-7 py-3.5 text-sm font-bold text-white shadow-md shadow-cyan-200 transition-all hover:-translate-y-0.5 hover:bg-cyan-600 hover:shadow-lg hover:shadow-cyan-200/70 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 active:scale-95 active:translate-y-0 sm:ml-2"
       >
         Search
       </button>

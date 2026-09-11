@@ -33,10 +33,10 @@ export default function SortDropdown({
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="group flex items-center gap-3 rounded-xl px-2 transition-colors hover:bg-slate-50">
       <ArrowDownUp
         size={17}
-        className="text-slate-400"
+        className="text-slate-400 transition-transform duration-200 group-hover:-translate-y-0.5"
       />
 
       <label
@@ -50,7 +50,7 @@ export default function SortDropdown({
         id="sort"
         value={initialSort}
         onChange={handleChange}
-        className="border-0 bg-transparent py-2 text-sm font-semibold text-slate-900 outline-none"
+        className="cursor-pointer border-0 bg-transparent py-2 text-sm font-semibold text-slate-900 outline-none"
       >
         <option value="rating_desc">
           Rating: High to Low

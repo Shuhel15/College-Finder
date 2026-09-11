@@ -103,9 +103,9 @@ export default function FilterPanel({
         <button
           type="button"
           onClick={resetFilters}
-          className="flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          className="group flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 active:scale-95"
         >
-          <RotateCcw size={14} />
+          <RotateCcw size={14} className="transition-transform duration-200 group-hover:rotate-180" />
           Reset
         </button>
       </div>
@@ -201,7 +201,7 @@ export default function FilterPanel({
       <div className="mt-6 flex justify-end">
         <button
           type="submit"
-          className="w-full rounded-xl bg-slate-950 px-8 py-3.5 text-sm font-bold text-white shadow-md shadow-slate-300 transition-all hover:-translate-y-0.5 hover:bg-cyan-500 hover:shadow-lg hover:shadow-cyan-200/70 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 active:translate-y-0 sm:w-auto"
+          className="w-full rounded-xl bg-slate-950 px-8 py-3.5 text-sm font-bold text-white shadow-md shadow-slate-300 transition-all hover:-translate-y-0.5 hover:bg-cyan-500 hover:shadow-lg hover:shadow-cyan-200/70 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 active:scale-95 active:translate-y-0 sm:w-auto"
         >
           Apply filters
         </button>
