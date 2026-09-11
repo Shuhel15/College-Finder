@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
 import { getOtp, deleteOtp } from "@/lib/otp";
+import { checkRateLimit } from "@/lib/redis";
 
 const verifySchema = z.object({
   email: z
@@ -13,7 +14,7 @@ const verifySchema = z.object({
 
   otp: z
     .string()
-    .regex(/^\d{6}$/, "Invalid OTP"),
+    .regex(/^\d{6}$/, "OTP must be exactly 6 digits"),
 });
 
 export async function POST(request: Request) {
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Invalid input",
+          message: "Invalid JSON body",
         },
         { status: 400 },
       );
@@ -44,15 +45,32 @@ export async function POST(request: Request) {
       );
     }
 
-    const {
+    const { email, otp } = result.data;
+
+    const rateLimit = await checkRateLimit(
+      "verify-otp",
       email,
-      otp,
-    } = result.data;
+      5,
+      10 * 60,
+    );
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Too many verification attempts. Please try again later.",
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfter),
+          },
+        },
+      );
+    }
 
     const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
       select: {
         id: true,
         emailVerified: true,
@@ -70,10 +88,13 @@ export async function POST(request: Request) {
     }
 
     if (user.emailVerified) {
-      return NextResponse.json({
-        success: true,
-        message: "Email is already verified",
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          message: "Email is already verified",
+        },
+        { status: 200 },
+      );
     }
 
     const storedOtp = await getOtp(email);
@@ -82,8 +103,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Verification code has expired. Please request a new code.",
+          message: "Verification code has expired. Please request a new code.",
         },
         { status: 400 },
       );
@@ -118,7 +138,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: "Unable to verify email",
+        message: "Something went wrong. Please try again.",
       },
       { status: 500 },
     );

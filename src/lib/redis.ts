@@ -1,4 +1,5 @@
 import Redis from "ioredis";
+import crypto from "crypto";
 
 const redisUrl = process.env.REDIS_URL;
 
@@ -159,7 +160,6 @@ export async function deleteEmailOtp(
 }
 
 
-
 export async function invalidateCollegeCache(
   id?: string
 ): Promise<void> {
@@ -186,5 +186,74 @@ export async function invalidateCollegeCache(
       "Redis cache invalidation failed:",
       error instanceof Error ? error.message : "Unknown error"
     );
+  }
+}
+
+export type RateLimitResult = {
+  allowed: boolean;
+  remaining: number;
+  retryAfter: number;
+};
+
+function hashRateLimitKey(value: string): string {
+  return crypto
+    .createHash("sha256")
+    .update(value)
+    .digest("hex");
+}
+
+export async function checkRateLimit(
+  namespace: string,
+  identifier: string,
+  limit: number,
+  windowSeconds: number,
+): Promise<RateLimitResult> {
+  if (!redis) {
+    return {
+      allowed: true,
+      remaining: limit,
+      retryAfter: 0,
+    };
+  }
+
+  const key = `collegefinder:rate:${namespace}:${hashRateLimitKey(identifier)}`;
+
+  try {
+    if (redis.status === "wait") {
+      await redis.connect();
+    }
+
+    const count = await redis.incr(key);
+
+    if (count === 1) {
+      await redis.expire(key, windowSeconds);
+    }
+
+    const ttl = await redis.ttl(key);
+
+    if (count > limit) {
+      return {
+        allowed: false,
+        remaining: 0,
+        retryAfter: Math.max(ttl, 1),
+      };
+    }
+
+    return {
+      allowed: true,
+      remaining: Math.max(limit - count, 0),
+      retryAfter: Math.max(ttl, 0),
+    };
+  } catch (error) {
+    console.error(
+      "Redis rate limit failed:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+
+    return {
+      allowed: true,
+      remaining: limit,
+      retryAfter: 0,
+    };
   }
 }

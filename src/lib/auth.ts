@@ -62,7 +62,10 @@ export const authOptions: NextAuthOptions = {
             throw new Error("EMAIL_NOT_VERIFIED");
           }
 
-          const passwordMatches = await bcrypt.compare(password, user.password);
+          const passwordMatches = await bcrypt.compare(
+            password,
+            user.password,
+          );
 
           if (!passwordMatches) {
             return null;
@@ -73,7 +76,13 @@ export const authOptions: NextAuthOptions = {
             name: user.name,
             email: user.email,
           };
-        } catch {
+        } catch(error) {
+          if(
+            error instanceof Error &&
+            error.message === "EMAIL_NOT_VERIFIED"
+          ){
+            throw error
+          }
           return null;
         }
       },
@@ -98,3 +107,4 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
+

@@ -35,7 +35,12 @@ export default function LoginPage() {
         redirect: false,
       });
 
-      if (!result || result.error) {
+      if (result?.error === "EMAIL_NOT_VERIFIED") {
+        setError("Email is not verified. Please verify your email.");
+        return;
+      }
+
+      if (result?.error) {
         setError("Invalid email or password.");
         return;
       }
@@ -133,15 +138,19 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => setShowPassword((value) => !value)}
                   disabled={loading}
-                  aria-label={
-                    showPassword ? "Hide password" : "Show password"
-                  }
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="group absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 active:scale-95"
                 >
                   {showPassword ? (
-                    <EyeOff size={18} className="transition-transform duration-200 group-hover:-translate-y-0.5" />
+                    <EyeOff
+                      size={18}
+                      className="transition-transform duration-200 group-hover:-translate-y-0.5"
+                    />
                   ) : (
-                    <Eye size={18} className="transition-transform duration-200 group-hover:-translate-y-0.5" />
+                    <Eye
+                      size={18}
+                      className="transition-transform duration-200 group-hover:-translate-y-0.5"
+                    />
                   )}
                 </button>
               </div>
@@ -160,7 +169,12 @@ export default function LoginPage() {
             >
               {loading ? "Signing in..." : "Sign in"}
 
-              {!loading && <ArrowRight size={17} className="group-hover:transition-transform group-hover:translate-x-1 duration-200"  />}
+              {!loading && (
+                <ArrowRight
+                  size={17}
+                  className="group-hover:transition-transform group-hover:translate-x-1 duration-200"
+                />
+              )}
             </button>
           </form>
 

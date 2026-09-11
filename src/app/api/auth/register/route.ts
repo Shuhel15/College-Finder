@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { generateOtp, storeOtp } from "@/lib/otp";
 import { sendVerificationOtp } from "@/lib/email";
+import { checkRateLimit } from "@/lib/redis";
 
 const registerSchema = z.object({
   name: z
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Invalid input",
+          message: "Invalid JSON body",
         },
         { status: 400 },
       );
@@ -48,21 +49,38 @@ export async function POST(request: Request) {
         {
           success: false,
           message: "Invalid input",
+          details: result.error.flatten().fieldErrors,
         },
         { status: 400 },
       );
     }
 
-    const {
-      name,
+    const { name, email, password } = result.data;
+
+    const rateLimit = await checkRateLimit(
+      "register",
       email,
-      password,
-    } = result.data;
+      5,
+      15 * 60,
+    );
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Too many registration attempts. Please try again later.",
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfter),
+          },
+        },
+      );
+    }
 
     const existingUser = await prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
       select: {
         id: true,
         emailVerified: true,
@@ -97,7 +115,23 @@ export async function POST(request: Request) {
 
     const otp = generateOtp();
 
-    await storeOtp(user.email, otp);
+    const otpStored = await storeOtp(user.email, otp);
+
+    if (!otpStored) {
+      await prisma.user.delete({
+        where: {
+          id: user.id,
+        },
+      });
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unable to start verification. Please try again.",
+        },
+        { status: 503 },
+      );
+    }
 
     try {
       await sendVerificationOtp(
@@ -115,18 +149,16 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Unable to send verification code. Please try again.",
+          message: "Unable to send verification code. Please try again.",
         },
-        { status: 500 },
+        { status: 503 },
       );
     }
 
     return NextResponse.json(
       {
         success: true,
-        message:
-          "Registration successful. Please verify your email.",
+        message: "Registration successful. Please verify your email.",
       },
       { status: 201 },
     );
@@ -134,7 +166,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: "Unable to complete registration",
+        message: "Something went wrong. Please try again.",
       },
       { status: 500 },
     );
