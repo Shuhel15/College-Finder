@@ -1,10 +1,6 @@
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  Building2,
-  MapPin,
-  Star,
-} from "lucide-react";
+import { ArrowUpRight, Building2, MapPin, Star } from "lucide-react";
+import CompareButton from "@/components/CompareButton";
 
 type College = {
   id: string;
@@ -22,11 +18,7 @@ function formatAmount(value: number) {
   return `₹${value.toLocaleString("en-IN")}`;
 }
 
-export default function CollegeCard({
-  college,
-}: {
-  college: College;
-}) {
+export default function CollegeCard({ college }: { college: College }) {
   return (
     <article className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-md shadow-slate-200/70 transition-all duration-200 hover:-translate-y-2 hover:border-cyan-300 hover:shadow-2xl hover:shadow-cyan-200/50">
       {/* Header */}
@@ -36,11 +28,7 @@ export default function CollegeCard({
         </div>
 
         <div className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
-          <Star
-            size={16}
-            className="text-amber-500"
-            fill="currentColor"
-          />
+          <Star size={16} className="text-amber-500" fill="currentColor" />
           {college.rating.toFixed(1)}
         </div>
       </div>
@@ -65,9 +53,7 @@ export default function CollegeCard({
       {/* Stats */}
       <div className="mt-6 grid grid-cols-2 gap-4 border-y border-slate-100 py-4">
         <div>
-          <p className="text-xs text-slate-400">
-            Annual fees
-          </p>
+          <p className="text-xs text-slate-400">Annual fees</p>
 
           <p className="mt-1 font-semibold text-slate-900">
             {formatAmount(college.fees)}
@@ -75,9 +61,7 @@ export default function CollegeCard({
         </div>
 
         <div>
-          <p className="text-xs text-slate-400">
-            Avg. placement
-          </p>
+          <p className="text-xs text-slate-400">Avg. placement</p>
 
           <p className="mt-1 font-semibold text-slate-900">
             {formatAmount(college.averagePlacement)}
@@ -87,9 +71,7 @@ export default function CollegeCard({
 
       {/* Highest placement */}
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-xs text-slate-400">
-          Highest placement
-        </span>
+        <span className="text-xs text-slate-400">Highest placement</span>
 
         <span className="text-sm font-semibold text-slate-900">
           {formatAmount(college.highestPlacement)}
@@ -111,6 +93,19 @@ export default function CollegeCard({
             />
           </span>
         </Link>
+        <div className="mt-auto pt-6">
+          <div className="flex items-center justify-between gap-3 border-t border-slate-100 pt-5">
+            <CompareButton collegeId={college.id} />
+
+            <Link
+              href={`/colleges/${college.slug}`}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 transition hover:text-cyan-600"
+            >
+              View details
+              <ArrowUpRight size={17} />
+            </Link>
+          </div>
+        </div>
       </div>
     </article>
   );

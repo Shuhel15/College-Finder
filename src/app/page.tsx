@@ -10,6 +10,7 @@ import FilterPanel from "@/components/FilterPanel";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import SortDropdown from "@/components/SortDropdown";
+import CompareBar from "@/components/CompareBar";
 
 type SearchParams = {
   search?: string;
@@ -240,6 +241,7 @@ export default async function HomePage({
           )}
         </div>
       </section>
+      <CompareBar />
     </main>
   );
 }
