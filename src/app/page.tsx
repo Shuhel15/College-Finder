@@ -3,6 +3,7 @@ import {
   Search,
   Sparkles,
 } from "lucide-react";
+import Image from "next/image";
 
 import CollegeCard from "@/components/CollegeCard";
 import EmptyState from "@/components/EmptyState";
@@ -159,7 +160,7 @@ export default async function HomePage({
   return (
     <main className="min-h-screen bg-white text-slate-950">
       <section className="border-b border-slate-200">
-        <div className="mx-auto max-w-7xl px-6 pb-14 pt-16 lg:px-8 lg:pb-16 lg:pt-20">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-14 pt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(420px,1fr)] lg:gap-8 lg:px-8 lg:pb-16 lg:pt-20">
           <div className="max-w-4xl">
             <div className="mb-6 flex items-center gap-2 text-sm font-semibold text-cyan-600">
               <Sparkles size={17} />
@@ -178,10 +179,21 @@ export default async function HomePage({
               Search, filter and compare colleges using the
               information that actually matters.
             </p>
+
+            <div className="mt-10 max-w-3xl">
+              <SearchBar initialValue={params.search} />
+            </div>
           </div>
 
-          <div className="mt-10 max-w-3xl">
-            <SearchBar initialValue={params.search} />
+          <div className="relative mx-auto w-full max-w-5xl -translate-x-16 sm:-translate-x-3 lg:translate-x-0 lg:justify-self-end lg:scale-125">
+            <Image
+              src="/Hero.png"
+              alt="Student exploring colleges with CollegeFinder"
+              width={1000}
+              height={800}
+              priority
+              className="h-auto w-full object-contain"
+            />
           </div>
         </div>
       </section>
