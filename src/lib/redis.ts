@@ -78,6 +78,88 @@ export async function setCache(
 }
 
 
+export const OTP_TTL = 600;
+
+export const emailOtpCacheKey = (email: string) =>
+  `collegefinder:otp:${email}`;
+
+export async function setEmailOtp(
+  email: string,
+  otp: string,
+): Promise<boolean> {
+  if (!redis) {
+    return false;
+  }
+
+  try {
+    if (redis.status === "wait") {
+      await redis.connect();
+    }
+
+    await redis.set(
+      emailOtpCacheKey(email),
+      otp,
+      "EX",
+      OTP_TTL,
+    );
+
+    return true;
+  } catch (error) {
+    console.error(
+      "Redis OTP SET failed:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+
+    return false;
+  }
+}
+
+export async function getEmailOtp(
+  email: string,
+): Promise<string | null> {
+  if (!redis) {
+    return null;
+  }
+
+  try {
+    if (redis.status === "wait") {
+      await redis.connect();
+    }
+
+    return await redis.get(emailOtpCacheKey(email));
+  } catch (error) {
+    console.error(
+      "Redis OTP GET failed:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+
+    return null;
+  }
+}
+
+export async function deleteEmailOtp(
+  email: string,
+): Promise<void> {
+  if (!redis) {
+    return;
+  }
+
+  try {
+    if (redis.status === "wait") {
+      await redis.connect();
+    }
+
+    await redis.del(emailOtpCacheKey(email));
+  } catch (error) {
+    console.error(
+      "Redis OTP DELETE failed:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+  }
+}
+
+
+
 export async function invalidateCollegeCache(
   id?: string
 ): Promise<void> {
