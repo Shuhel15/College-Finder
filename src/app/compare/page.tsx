@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 
 import CollegeComparisonTable from "@/components/CollegeComparisonTable";
+import FadeIn from "@/components/FadeIn";
 
 type College = {
   id: string;
@@ -161,7 +162,7 @@ export default async function ComparePage({
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+        <FadeIn className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
           <Link
             href="/"
             className="group inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-slate-500 transition hover:bg-cyan-50 hover:text-cyan-600 active:scale-95"
@@ -191,11 +192,13 @@ export default async function ComparePage({
               {colleges.length} colleges
             </span>
           </div>
-        </div>
+        </FadeIn>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
-        <CollegeComparisonTable colleges={colleges} />
+        <FadeIn delay={0.15}>
+          <CollegeComparisonTable colleges={colleges} />
+        </FadeIn>
       </section>
     </main>
   );

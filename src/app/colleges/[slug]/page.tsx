@@ -13,6 +13,7 @@ import {
 
 import CourseList from "@/components/CourseList";
 import SaveButton from "@/components/SaveButton";
+import FadeIn from "@/components/FadeIn";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
@@ -186,7 +187,7 @@ export default async function CollegeDetailPage({
       </div>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+        <FadeIn className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
           <div className="grid gap-10 lg:grid-cols-[1fr_300px]">
             <div>
               <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600">
@@ -239,11 +240,11 @@ export default async function CollegeDetailPage({
               </p>
             </div>
           </div>
-        </div>
+        </FadeIn>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <FadeIn delay={0.1} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-50 text-cyan-600">
               <IndianRupee size={20} />
@@ -299,7 +300,7 @@ export default async function CollegeDetailPage({
               {college.courses.length}
             </p>
           </div>
-        </div>
+        </FadeIn>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-20 lg:px-8">

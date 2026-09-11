@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 import { Eye, EyeOff, LockKeyhole, Mail, ArrowRight } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import FadeIn from "@/components/FadeIn";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -56,7 +57,7 @@ export default function LoginPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
-      <div className="w-full max-w-md">
+      <FadeIn className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Link
             href="/"
@@ -188,7 +189,7 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
-      </div>
+      </FadeIn>
     </main>
   );
 }

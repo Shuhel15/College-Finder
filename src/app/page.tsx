@@ -12,6 +12,9 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import SortDropdown from "@/components/SortDropdown";
 import CompareBar from "@/components/CompareBar";
+import MotionCard from "@/components/MotionCard";
+import FadeIn from "@/components/FadeIn";
+import FloatingImage from "@/components/FloatingImage";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
@@ -161,7 +164,7 @@ export default async function HomePage({
     <main className="min-h-screen bg-white text-slate-950">
       <section className="border-b border-slate-200">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-14 pt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(420px,1fr)] lg:gap-8 lg:px-8 lg:pb-16 lg:pt-20">
-          <div className="max-w-4xl">
+          <FadeIn direction="up" delay={0.1} className="max-w-4xl">
             <div className="mb-6 flex items-center gap-2 text-sm font-semibold text-cyan-600">
               <Sparkles size={17} />
               College discovery made simple
@@ -183,28 +186,32 @@ export default async function HomePage({
             <div className="mt-10 max-w-3xl">
               <SearchBar initialValue={params.search} />
             </div>
-          </div>
+          </FadeIn>
 
-          <div className="relative mx-auto w-full max-w-5xl -translate-x-16 sm:-translate-x-3 lg:translate-x-0 lg:justify-self-end lg:scale-125">
-            <Image
-              src="/Hero.png"
-              alt="Student exploring colleges with CollegeFinder"
-              width={1000}
-              height={800}
-              priority
-              className="h-auto w-full object-contain"
-            />
-          </div>
+          <FadeIn direction="left" delay={0.2} className="relative mx-auto w-full max-w-5xl -translate-x-16 sm:-translate-x-3 lg:translate-x-0 lg:justify-self-end lg:scale-125">
+            <FloatingImage>
+              <Image
+                src="/Hero.png"
+                alt="Student exploring colleges with CollegeFinder"
+                width={1000}
+                height={800}
+                priority
+                className="h-auto w-full object-contain"
+              />
+            </FloatingImage>
+          </FadeIn>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
-        <FilterPanel
-          initialLocation={params.location}
-          initialMinFees={params.minFees}
-          initialMaxFees={params.maxFees}
-          initialMinRating={params.minRating}
-        />
+        <FadeIn delay={0.1}>
+          <FilterPanel
+            initialLocation={params.location}
+            initialMinFees={params.minFees}
+            initialMaxFees={params.maxFees}
+            initialMinRating={params.minRating}
+          />
+        </FadeIn>
 
         <div className="mt-10 flex flex-col justify-between gap-5 border-b border-slate-200 pb-5 sm:flex-row sm:items-end">
           <div>
@@ -255,12 +262,13 @@ export default async function HomePage({
           ) : (
             <>
               <div className="grid gap-6 pt-6 md:grid-cols-2 xl:grid-cols-3">
-                {result.data.map((college) => (
-                  <CollegeCard
-                    key={college.id}
-                    college={college}
-                    initialSaved={savedCollegeIds.has(college.id)}
-                  />
+                {result.data.map((college, index) => (
+                  <MotionCard key={college.id} delay={(index % 3) * 0.1}>
+                    <CollegeCard
+                      college={college}
+                      initialSaved={savedCollegeIds.has(college.id)}
+                    />
+                  </MotionCard>
                 ))}
               </div>
 

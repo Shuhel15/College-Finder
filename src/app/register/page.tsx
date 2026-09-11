@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import FadeIn from "@/components/FadeIn";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -79,7 +80,7 @@ export default function RegisterPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-linear-to-br from-cyan-50 via-slate-50 to-white px-4 py-12">
-      <div className="w-full max-w-md">
+      <FadeIn className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Link
             href="/"
@@ -275,7 +276,7 @@ export default function RegisterPage() {
             </Link>
           </p>
         </div>
-      </div>
+      </FadeIn>
     </main>
   );
 }

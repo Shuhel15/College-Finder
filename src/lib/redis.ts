@@ -257,3 +257,26 @@ export async function checkRateLimit(
     };
   }
 }
+
+export async function invalidateQuestionsCache(): Promise<void> {
+  if (!redis) {
+    return;
+  }
+
+  try {
+    if (redis.status === "wait") {
+      await redis.connect();
+    }
+
+    const keys = await redis.keys("questions:all:*");
+
+    if (keys.length > 0) {
+      await redis.del(...keys);
+    }
+  } catch (error) {
+    console.error(
+      "Redis question cache invalidation failed:",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+  }
+}
